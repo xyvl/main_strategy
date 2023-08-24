@@ -43,7 +43,8 @@ class dataChange {
 	}
 	// Записать информацию для одной случайной монеты получая сразу 5 свеч
 	async getAndWriteInfoRandomCoinFiveBarInThreeStreams(req: Request, res: Response) {
-		const allCoin: string[] = JSON.parse(fs.readFileSync('./data/all_coins.json', 'utf8'))
+		let allCoin: string[] = JSON.parse(fs.readFileSync('./data/all_coins.json', 'utf8'))
+		allCoin = allCoin.reverse()
 		let symbol: string = ''
 		let count = 0
 		const finallyArray: IArrayDay[] = []
@@ -102,7 +103,7 @@ class dataChange {
 				for (let i = 0; i < data.length; i++) {
 					for (let j = 0; j < data[i].length; j++) {
 						finallyArray.push(data[i][j])
-					}	
+					}
 				}
 			})
 		}

@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import axios, { AxiosResponse } from 'axios'
 import fs from 'fs'
 import { IStrategyBlock, IGetAllCoins } from "../type/TypeCreateData"
+import { TypeArrayCandle } from "../type/TypeDataChange"
 
 class allCoins {
 	// Создание файла где находятся все монеты
@@ -46,6 +47,19 @@ class allCoins {
 		}
 		fs.writeFileSync(`./data/strategy/strategy_${strategy}.json`, JSON.stringify(finallyArray))
 		res.json('Ok')
+	}
+	// Создание файла монеты которым менее 600 дней
+	async createFileForCoinsLessThan600DaysOld(req: Request, res: Response){
+		const allCoin: string[] = JSON.parse(fs.readFileSync(`./data/all_coins.json`, 'utf8'))
+		const finallyArray: string[] = []
+		for (let i = 0; i < allCoin.length; i++) {
+			const array: TypeArrayCandle[] = (await axios.get(`${process.env.GET_DAY_COIN}symbol=${allCoin[i]}&interval=5m&startTime=${1640217600000}&limit=1`)).data
+			if(array[0][0] !== 1640217600000){
+				finallyArray.push(allCoin[i])
+			}	
+		}
+		fs.writeFileSync(`./data/coin_live.json`, JSON.stringify(finallyArray))
+		res.json('finish')
 	}
 }
 export const createDataController = new allCoins()

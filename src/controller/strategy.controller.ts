@@ -1,8 +1,9 @@
 import { Request, Response } from "express"
 import { IStrategyBlock } from "../type/TypeCreateData"
 import fs from 'fs'
-import { IArrayDay } from "../type/TypeDataChange"
+import { IArrayDay, TypeArrayCandle } from "../type/TypeDataChange"
 import { getPositionInformation } from "../function/strategy"
+import axios from "axios"
 class strategy {
 	async shortStrategy(req: Request, res: Response) {
 		const strategy: IStrategyBlock[][] = JSON.parse(fs.readFileSync('./data/strategy/strategy_short.json', 'utf8'))
@@ -61,13 +62,6 @@ class strategy {
 		res.json('long')
 	}
 	async checkingTheStrategy(req: Request, res: Response){
-		const coin: IArrayDay[] = JSON.parse(fs.readFileSync(`./data/SUSHIUSDT.json`, 'utf8'))
-		for (let i = 0; i < coin.length; i++) {
-			if(coin[i].change > 20){
-				console.log(coin[i].change, i)
-			}
-			
-		}
 		res.json('finish')
 	}
 }
