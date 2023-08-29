@@ -1,7 +1,6 @@
 import { IArrayDay, IFunding, IMyArrayCandle, TypeArrayCandle } from "../type/TypeDataChange"
 
 export const createDayArray = (data: TypeArrayCandle[], fundingArray: IFunding[]): IArrayDay => {
-	console.log(data.length)
 	let open = parseFloat(data[0][1])
 	let close = parseFloat(data[data.length - 1][4])
 	let arrayMax: number[] = []

@@ -10,3 +10,20 @@ export const getPositionInformation = (entryPrice: number, stopLoss: number, tak
 		entrance - (takeProfit / coefficient) * array.halfPercent,
 	]
 }
+export const fundingFunction = (value: number, strategy: "long" | "short") => {
+	if (strategy === "long") {
+		if (value > 0) {
+			return Math.abs(value) * -1
+		} else {
+			return Math.abs(value)
+		}
+	}
+	if (strategy === "short") {
+		if (value < 0) {
+			return Math.abs(value) * -1
+		} else {
+			return Math.abs(value)
+		}
+	}
+	return 0
+}

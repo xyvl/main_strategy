@@ -1,4 +1,4 @@
-export interface IStrategyBlock{
+export interface IStrategyBlock {
 	take: number,
 	stop: number,
 	profit: number,
@@ -13,4 +13,11 @@ export interface IGetAllCoins {
 	interestRate: string,
 	nextFundingTime: number,
 	time: number
+}
+export interface ICreateStrategyBody {
+	openProcent: number,
+	strategy: string,
+	maxProcent: number,
+	stopAndTakeDeal: number, 
+	maxStopAndTakeDeal: number
 }

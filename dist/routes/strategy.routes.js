@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.strategyRouter = void 0;
+const strategy_controller_1 = require("../controller/strategy.controller");
+const Router = require('express').Router;
+const router = new Router();
+router.get('/long_strategy', strategy_controller_1.strategyController.longStrategy);
+router.get('/short_strategy', strategy_controller_1.strategyController.shortStrategy);
+router.get('/listing_strategy', strategy_controller_1.strategyController.listingStrategy);
+router.get('/checking_the_strategy', strategy_controller_1.strategyController.checkingTheStrategy);
+exports.strategyRouter = router;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import axios, { AxiosResponse } from 'axios'
 import fs from 'fs'
-import { IStrategyBlock, IGetAllCoins } from "../type/TypeCreateData"
+import { IStrategyBlock, IGetAllCoins, ICreateStrategyBody } from "../type/TypeCreateData"
 import { TypeArrayCandle } from "../type/TypeDataChange"
 
 class allCoins {
@@ -31,34 +31,21 @@ class allCoins {
 		}
 		res.json(allCoinsArray)
 	}
-	// Создание файла для первой стратегии
-	async createFileFirstStrategy(req: Request, res: Response) {
-		const {strategy} = req.query
+	// Создание файла для стратегии
+	async createFileStrategy(req: Request<any, any, ICreateStrategyBody>, res: Response) {
+		const {strategy, openProcent, maxProcent, stopAndTakeDeal, maxStopAndTakeDeal} = req.body
 		const finallyArray: IStrategyBlock[][] = []
-		const minProcent = 20
 		const coefficent = 0.5
-		for (let i = minProcent; i < 100; i++) {
+		for (let i = openProcent; i < maxProcent; i++) {
 			finallyArray[i] = []
-			for (let j = 2; j < 20; j+= coefficent) {
-				for (let k = 2; k < 20; k+= coefficent) {
+			for (let j = stopAndTakeDeal; j <= maxStopAndTakeDeal; j+= coefficent) {
+				for (let k = stopAndTakeDeal; k <= maxStopAndTakeDeal; k+= coefficent) {
 					finallyArray[i].push({take: j, stop: k, amountDeals: 0, profit: 0})
 				}
 			}
 		}
-		fs.writeFileSync(`./data/strategy/strategy_${strategy}.json`, JSON.stringify(finallyArray))
-		res.json('Ok')
-	}
-	// Создание файла монеты которым менее 600 дней
-	async createFileForCoinsLessThan600DaysOld(req: Request, res: Response){
-		const allCoin: string[] = JSON.parse(fs.readFileSync(`./data/all_coins.json`, 'utf8'))
-		const finallyArray: string[] = []
-		for (let i = 0; i < allCoin.length; i++) {
-			const array: TypeArrayCandle[] = (await axios.get(`${process.env.GET_DAY_COIN}symbol=${allCoin[i]}&interval=5m&startTime=${1640217600000}&limit=1`)).data
-			if(array[0][0] !== 1640217600000){
-				finallyArray.push(allCoin[i])
-			}	
-		}
-		fs.writeFileSync(`./data/coin_live.json`, JSON.stringify(finallyArray))
+		fs.writeFileSync(`./data/strategy_${strategy}/strategy_file.json`, JSON.stringify(finallyArray))
+		fs.writeFileSync(`./data/strategy_${strategy}/coins_remained.json`, fs.readFileSync('./data/all_coins.json', 'utf8'))
 		res.json('finish')
 	}
 }

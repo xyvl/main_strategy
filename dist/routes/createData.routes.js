@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createDataRouter = void 0;
+const createData_controller_1 = require("../controller/createData.controller");
+const Router = require('express').Router;
+const router = new Router();
+router.get('/get_coins', createData_controller_1.createDataController.createFileForAllCoins);
+router.get('/create_file_for_each_coin', createData_controller_1.createDataController.createFileForEachCoin);
+router.post('/create_file_strategy', createData_controller_1.createDataController.createFileStrategy);
+exports.createDataRouter = router;
